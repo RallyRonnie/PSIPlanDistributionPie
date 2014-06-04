@@ -66,9 +66,9 @@ Ext.define('CustomApp', {
 				});
 			}
 		}
-		this._showPie(count_array);
+		this._showPie(count_array, counter, total);
 	},
-	_showPie:function(count_array){
+	_showPie:function(count_array, count, total){
 		var me = this;
 		var int_array = [];
 		Ext.Array.each(count_array,function(item){
@@ -81,7 +81,8 @@ Ext.define('CustomApp', {
 		this.chart = Ext.create('Ext.chart.Chart', {
 			minWidth: 400,
 			minHeight: 500,
-//			html: '<div align="center"><h1>test</h1></div>',
+			html: '<div align="center"><br><h1>' + count + ' Stories with ' +  total + 
+					' Estimated Points</h1></div>',
 			store: mystore,
 			theme: 'Base:gradients',
 			series: [{
