@@ -9,7 +9,7 @@ Ext.define('CustomApp', {
     },
 
     addContent: function() {
-
+		this._showMask("Loading Data");
         this._makeStore();
     },
 
@@ -21,7 +21,7 @@ Ext.define('CustomApp', {
             filters: [this.getContext().getTimeboxScope().getQueryFilter()],
             listeners: {
                 load: function(store,data){
-					console.log(["store",data]);
+//					console.log(["store",data]);
 					this._countPointsByCategory(data);
 				},
                 scope: this
@@ -30,10 +30,10 @@ Ext.define('CustomApp', {
     },
 
    onScopeChange: function() {
+		this._showMask("Loading Data");
         this._makeStore();
     },
 	_countPointsByCategory: function(records) {
-		console.log("_countPointsByCategory");
 		var me = this;
 		var counts = {};
 		var counter = 0;
@@ -47,15 +47,14 @@ Ext.define('CustomApp', {
 				var PIobject = record.get('Feature');
 				category = PIobject.FormattedID;
 			}
-			console.log("Record: " + record.get('FormattedID') + ' PI: ' + category);
+//			console.log("Record: " + record.get('FormattedID') + ' PI: ' + category);
 			if ( ! counts[category] ) { counts[category] = 0; }
 			counts[category] += points;
-			console.log(counts);
 			total += points;
 			counter++;
 		});
                     
-		console.log(["for ", counter, " records: ", counts]);
+//		console.log(["for ", counter, " records: ", counts]);
 		// normalize to percentages
 		var count_array = [];
 		for ( var category in counts ) {
@@ -70,7 +69,6 @@ Ext.define('CustomApp', {
 		this._showPie(count_array);
 	},
 	_showPie:function(count_array){
-		console.log(["_showPie",count_array]);
 		var me = this;
 		var int_array = [];
 		Ext.Array.each(count_array,function(item){
@@ -79,21 +77,13 @@ Ext.define('CustomApp', {
 		var mystore = Ext.create('Rally.data.custom.Store',{
 			data: count_array
 		});
-		console.log("change!", mystore);
 		if ( this.chart ) { this.chart.destroy(); }
 		this.chart = Ext.create('Ext.chart.Chart', {
-			title: { text: 'Work Types' },
-			width: 600,
-			height: 400,
-//			animate: true,
+			minWidth: 400,
+			minHeight: 500,
+//			html: '<div align="center"><h1>test</h1></div>',
 			store: mystore,
 			theme: 'Base:gradients',
-			chart: {
-				title: { text: 'Work Types' },
-				plotBackgroundColor: null,
-				plotBorderWidth: null,
-				plotShadow: false
-			},
 			series: [{
 				type: 'pie',
 				allowPointSelect: false,
@@ -118,10 +108,8 @@ Ext.define('CustomApp', {
 				}
 			}]
 		});
-		console.log("chart made");
 		me.add(this.chart);
 		this._hideMask();
-		console.log("chart done");
 	},
 	_showMask: function(msg) {
 		if ( this.getEl() ) { 
