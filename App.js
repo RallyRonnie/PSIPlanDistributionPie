@@ -88,6 +88,12 @@ Ext.define('CustomApp', {
 //			animate: true,
 			store: mystore,
 			theme: 'Base:gradients',
+			chart: {
+				title: { text: 'Work Types' },
+				plotBackgroundColor: null,
+				plotBorderWidth: null,
+				plotShadow: false
+			},
 			series: [{
 				type: 'pie',
 				allowPointSelect: false,
@@ -97,6 +103,7 @@ Ext.define('CustomApp', {
 					trackMouse: true,
 					width: 140,
 					height: 50,
+					hideDelay: 2000,
 					renderer: function(storeItem, item) {
 						this.setTitle(storeItem.get('name') + ': ' + 
 						Math.round(storeItem.get('percentage'), 3) + 
